@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AlbumCoverMatchGame.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -26,6 +27,7 @@ namespace AlbumCoverMatchGame
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private ObservableCollection<Song> Songs;
         public MainPage()
         {
             this.InitializeComponent();
@@ -39,8 +41,10 @@ namespace AlbumCoverMatchGame
             await RetrieveFilesInFolders(allSongs, folder);
 
             // 2. Choose random songs from library
+            var randomSongs = await PickRandomSongs(allSongs);
 
             // 3. Select parts of song needed (meta data from selected songs)
+
         }
         private async Task RetrieveFilesInFolders(
             ObservableCollection<StorageFile> list, 
