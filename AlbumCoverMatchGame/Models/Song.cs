@@ -17,6 +17,6 @@ namespace AlbumCoverMatchGame.Models
         public StorageFile SongFile { get; set; }
         public bool Selected { get; set; }
 
-        public BitConverter AlbumCover { get; set; }
+        public BitmapImage AlbumCover { get; set; }
     }
 }

@@ -27,29 +27,20 @@ namespace AlbumCoverMatchGame
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainPage : Page
+
     {
         private ObservableCollection<Song> Songs;
+        private ObservableCollection<StorageFile> AllSongs;
+
         public MainPage()
         {
             this.InitializeComponent();
+
             Songs = new ObservableCollection<Song>();
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            // 1. Get access to Music Library
-            StorageFolder folder = KnownFolders.MusicLibrary;
-            var allSongs = new ObservableCollection<StorageFile>();
-            await RetrieveFilesInFolders(allSongs, folder);
-
-            // 2. Choose random songs from library
-            var randomSongs = await PickRandomSongs(allSongs);
-
-            // 3. Select parts of song needed (meta data from selected songs)
-            await PopulateSongList(randomSongs);
-        }
         private async Task RetrieveFilesInFolders(
-            ObservableCollection<StorageFile> list, 
+            ObservableCollection<StorageFile> list,
             StorageFolder parent)
         {
             foreach (var item in await parent.GetFilesAsync())
@@ -57,11 +48,13 @@ namespace AlbumCoverMatchGame
                 if (item.FileType == ".mp3")
                     list.Add(item);
             }
+
             foreach (var item in await parent.GetFoldersAsync())
             {
                 await RetrieveFilesInFolders(list, item);
             }
         }
+
         private async Task<List<StorageFile>> PickRandomSongs(ObservableCollection<StorageFile> allSongs)
         {
             Random random = new Random();
@@ -69,16 +62,16 @@ namespace AlbumCoverMatchGame
 
             var randomSongs = new List<StorageFile>();
 
-            // Find random songs but don't pick the same song twice and
-            // don't pick a song from an album that's already selected
-
-            while(randomSongs.Count < 10)
+            while (randomSongs.Count < 10)
             {
                 var randomNumber = random.Next(songCount);
                 var randomSong = allSongs[randomNumber];
 
-                //Check if above cases are valid
-                MusicProperties randomSongMusicProperties = 
+                // Find random songs but:
+                // 1) Don't pick the same song twice
+                // 2) Don't pick a song from an album that's selected.
+
+                MusicProperties randomSongMusicProperties =
                     await randomSong.Properties.GetMusicPropertiesAsync();
 
                 bool isDuplicate = false;
@@ -88,10 +81,13 @@ namespace AlbumCoverMatchGame
                     if (String.IsNullOrEmpty(randomSongMusicProperties.Album)
                         || randomSongMusicProperties.Album == songMusicProperties.Album)
                         isDuplicate = true;
+
                 }
-                if(!isDuplicate)
+
+                if (!isDuplicate)
                     randomSongs.Add(randomSong);
             }
+
             return randomSongs;
         }
 
@@ -122,6 +118,7 @@ namespace AlbumCoverMatchGame
                 Songs.Add(song);
                 id++;
             }
+
         }
 
         private void SongGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -136,6 +133,40 @@ namespace AlbumCoverMatchGame
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
 
+
+        }
+
+        private async Task<ObservableCollection<StorageFile>> SetupMusicList()
+        {
+            // Get access to Music library
+            StorageFolder folder = KnownFolders.MusicLibrary;
+            var allSongs = new ObservableCollection<StorageFile>();
+            await RetrieveFilesInFolders(allSongs, folder);
+            return allSongs;
+        }
+
+        private async Task PrepareNewGame()
+        {
+            Songs.Clear();
+
+            // Choose random songs from library
+            var randomSongs = await PickRandomSongs(AllSongs);
+
+            // Pluck off meta data from selected songs
+            await PopulateSongList(randomSongs);
+
+            // State management
+
+        }
+
+        private async void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            StartupProgressRing.IsActive = true;
+
+            AllSongs = await SetupMusicList();
+            await PrepareNewGame();
+
+            StartupProgressRing.IsActive = false;
         }
     }
 }
