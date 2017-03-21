@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -31,6 +32,7 @@ namespace AlbumCoverMatchGame
         public MainPage()
         {
             this.InitializeComponent();
+            Songs = new ObservableCollection<Song>();
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -44,7 +46,7 @@ namespace AlbumCoverMatchGame
             var randomSongs = await PickRandomSongs(allSongs);
 
             // 3. Select parts of song needed (meta data from selected songs)
-
+            await PopulateSongList(randomSongs);
         }
         private async Task RetrieveFilesInFolders(
             ObservableCollection<StorageFile> list, 
@@ -91,6 +93,49 @@ namespace AlbumCoverMatchGame
                     randomSongs.Add(randomSong);
             }
             return randomSongs;
+        }
+
+        private async Task PopulateSongList(List<StorageFile> files)
+        {
+            int id = 0;
+
+            foreach (var file in files)
+            {
+                MusicProperties songProperties = await file.Properties.GetMusicPropertiesAsync();
+
+                StorageItemThumbnail currentThumb = await file.GetThumbnailAsync(
+                    ThumbnailMode.MusicView,
+                    200,
+                    ThumbnailOptions.UseCurrentScale);
+
+                var albumCover = new BitmapImage();
+                albumCover.SetSource(currentThumb);
+
+                var song = new Song();
+                song.Id = id;
+                song.Title = songProperties.Title;
+                song.Artist = songProperties.Artist;
+                song.Album = songProperties.Album;
+                song.AlbumCover = albumCover;
+                song.SongFile = file;
+
+                Songs.Add(song);
+                id++;
+            }
+        }
+
+        private void SongGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
+        }
+
+        private void PlayAgainButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

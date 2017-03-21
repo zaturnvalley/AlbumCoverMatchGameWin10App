@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace AlbumCoverMatchGame.Models
 {
@@ -15,5 +16,7 @@ namespace AlbumCoverMatchGame.Models
         public string Album { get; set; }
         public StorageFile SongFile { get; set; }
         public bool Selected { get; set; }
+
+        public BitConverter AlbumCover { get; set; }
     }
 }
