@@ -161,7 +161,19 @@ namespace AlbumCoverMatchGame
             TitleTextBlock.Text = String.Format("Correct Song: {0}", correctSong.Title);
             ArtistTextBlock.Text = string.Format("Performed by: {0}", correctSong.Artist);
             AlbumTextBlock.Text = string.Format("On Album: {0}", correctSong.Album);
-            StartCoolDown();
+
+            clickedSong.Used = true;
+            correctSong.Selected = false;
+            correctSong.Used = true;
+
+            if (_round >= 5)
+            {
+                InstructionTextBlock.Text = string.Format("Game over ... You scored: {0}", _totalScore);
+                PlayAgainButton.Visibility = Visibility.Visible;
+            } else
+            {
+                StartCoolDown();
+            }
         }
 
         private void PlayAgainButton_Click(object sender, RoutedEventArgs e)
