@@ -167,6 +167,16 @@ namespace AlbumCoverMatchGame
             await PrepareNewGame();
 
             StartupProgressRing.IsActive = false;
+            StartCoolDown();
+        }
+        private void StartCoolDown()
+        {
+            CountDown.Begin();
+        }
+
+        private void CountDown_Completed(object sender, object e)
+        {
+
         }
     }
 }
