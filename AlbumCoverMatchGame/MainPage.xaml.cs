@@ -168,7 +168,7 @@ namespace AlbumCoverMatchGame
 
             if (_round >= 5)
             {
-                InstructionTextBlock.Text = string.Format("Game over ... You scored: {0}", _totalScore);
+                InstructionTextBlock.Text = string.Format("Game over . . . You scored: {0}", _totalScore);
                 PlayAgainButton.Visibility = Visibility.Visible;
             } else
             {
@@ -176,9 +176,11 @@ namespace AlbumCoverMatchGame
             }
         }
 
-        private void PlayAgainButton_Click(object sender, RoutedEventArgs e)
+        private async void PlayAgainButton_Click(object sender, RoutedEventArgs e)
         {
+            await PrepareNewGame();
 
+            PlayAgainButton.Visibility = Visibility.Collapsed;
         }
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -205,7 +207,17 @@ namespace AlbumCoverMatchGame
             // Pluck off meta data from selected songs
             await PopulateSongList(randomSongs);
 
+            StartCoolDown();
+
             // State management
+            InstructionTextBlock.Text = "Get Ready . . .";
+            ResultTextBlock.Text = "";
+            TitleTextBlock.Text = "";
+            ArtistTextBlock.Text = "";
+            AlbumTextBlock.Text = "";
+
+            _totalScore = 0;
+            _round = 0;
 
         }
 
@@ -224,7 +236,7 @@ namespace AlbumCoverMatchGame
             _playingMusic = false;
             SolidColorBrush brush = new SolidColorBrush(Windows.UI.Colors.SteelBlue);
             MyProgressBar.Foreground = brush;
-            InstructionTextBlock.Text = string.Format("Get ready for round {0} ...", _round + 1);
+            InstructionTextBlock.Text = string.Format("Get ready for round {0} . . .", _round + 1);
             InstructionTextBlock.Foreground = brush;
             CountDown.Begin();
         }
