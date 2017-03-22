@@ -128,7 +128,7 @@ namespace AlbumCoverMatchGame
         private void SongGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             // Evaluate the user's selection
-
+            _round++;
             StartCoolDown();
         }
 
@@ -195,15 +195,30 @@ namespace AlbumCoverMatchGame
             CountDown.Begin();
         }
 
-        private void CountDown_Completed(object sender, object e)
+        private async void CountDown_Completed(object sender, object e)
         {
             if (!_playingMusic)
             {
                 // Start playing music
+                var song = PickSong();
 
                 // Start countdown
                 StartCountDown();
+
+                MyMediaElement.SetSource(
+                    await song.SongFile.OpenAsync(FileAccessMode.Read),
+                    song.SongFile.ContentType);
             }
+        }
+
+        private Song PickSong()
+        {
+            Random random = new Random();
+            var unusedSongs = Songs.Where(p => p.Used == false);
+            var randomNumber = random.Next(unusedSongs.Count());
+            var randomSong = unusedSongs.ElementAt(randomNumber);
+            randomSong.Selected = true;
+            return randomSong;
         }
     }
 }
