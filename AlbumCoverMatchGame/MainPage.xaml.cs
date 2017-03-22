@@ -35,6 +35,7 @@ namespace AlbumCoverMatchGame
 
         bool _playingMusic = false;
         int _round = 0;
+        int _totalScore = 0;
 
         public MainPage()
         {
@@ -134,25 +135,32 @@ namespace AlbumCoverMatchGame
             MyMediaElement.Stop();
 
             var clickedSong = (Song)e.ClickedItem;
-
-            //var correctSong = Songs.FirstOrDefault(p => p.Selected == true); 
+            var correctSong = Songs.FirstOrDefault(p => p.Selected == true);
 
             // Evaluate the user's selection
+            Uri uri;
+            int score;
             if (clickedSong.Selected)
             {
-                var uri = new Uri("ms-appx:///Assets/correct.png");
-                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(uri);
-                var fileStream = await file.OpenAsync(FileAccessMode.Read);
-                await clickedSong.AlbumCover.SetSourceAsync(fileStream);
+              uri = new Uri("ms-appx:///Assets/correct.png");
+                score = (int)MyProgressBar.Value;
             }
             else
             {
-                var uri = new Uri("ms-appx:///Assets/incorrect.png");
-                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(uri);
-                var fileStream = await file.OpenAsync(FileAccessMode.Read);
-                await clickedSong.AlbumCover.SetSourceAsync(fileStream);
+              uri = new Uri("ms-appx:///Assets/incorrect.png");
+                score = ((int)MyProgressBar.Value) * -1;
             }
+            StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(uri);
+            var fileStream = await file.OpenAsync(FileAccessMode.Read);
+            await clickedSong.AlbumCover.SetSourceAsync(fileStream);
+
+            _totalScore += score;
             _round++;
+
+            ResultTextBlock.Text = string.Format("Score: {0} Total Score after {1} Rounds: {2}", score, _round, _totalScore);
+            TitleTextBlock.Text = String.Format("Correct Song: {0}", correctSong.Title);
+            ArtistTextBlock.Text = string.Format("Performed by: {0}", correctSong.Artist);
+            AlbumTextBlock.Text = string.Format("On Album: {0}", correctSong.Album);
             StartCoolDown();
         }
 
