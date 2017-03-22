@@ -28,13 +28,13 @@
     <AppXManifest Include="c:\users\zach\documents\visual studio 2015\Projects\AlbumCoverMatchGame\AlbumCoverMatchGame\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2017-03-21T22:10:28.950</Modified>
+      <Modified>2017-03-22T18:12:00.945</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="c:\users\zach\documents\visual studio 2015\Projects\AlbumCoverMatchGame\AlbumCoverMatchGame\bin\x86\Debug\AlbumCoverMatchGame.exe">
       <PackagePath>entrypoint\AlbumCoverMatchGame.exe</PackagePath>
-      <Modified>2017-03-21T22:10:28.748</Modified>
+      <Modified>2017-03-22T18:12:00.679</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\zach\.nuget\packages\Microsoft.CSharp\4.0.0\lib\netcore50\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
@@ -488,7 +488,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="c:\users\zach\documents\visual studio 2015\Projects\AlbumCoverMatchGame\AlbumCoverMatchGame\bin\x86\Debug\AlbumCoverMatchGame.xr.xml">
       <PackagePath>AlbumCoverMatchGame.xr.xml</PackagePath>
-      <Modified>2017-03-21T21:58:43.071</Modified>
+      <Modified>2017-03-22T16:18:04.706</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
@@ -497,11 +497,11 @@
     <AppxPackagedFile Include="c:\users\zach\documents\visual studio 2015\Projects\AlbumCoverMatchGame\AlbumCoverMatchGame\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2017-03-21T21:58:44.476</Modified>
+      <Modified>2017-03-22T18:09:04.416</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="c:\users\zach\documents\visual studio 2015\Projects\AlbumCoverMatchGame\AlbumCoverMatchGame\bin\x86\Debug\Core\AlbumCoverMatchGame.exe">
       <PackagePath>AlbumCoverMatchGame.exe</PackagePath>
-      <Modified>2017-03-21T22:10:28.946</Modified>
+      <Modified>2017-03-22T18:12:00.941</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

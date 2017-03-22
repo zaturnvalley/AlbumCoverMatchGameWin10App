@@ -10,6 +10,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -31,6 +32,9 @@ namespace AlbumCoverMatchGame
     {
         private ObservableCollection<Song> Songs;
         private ObservableCollection<StorageFile> AllSongs;
+
+        bool _playingMusic = false;
+        int _round = 0;
 
         public MainPage()
         {
@@ -123,7 +127,9 @@ namespace AlbumCoverMatchGame
 
         private void SongGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            // Evaluate the user's selection
 
+            StartCoolDown();
         }
 
         private void PlayAgainButton_Click(object sender, RoutedEventArgs e)
@@ -171,12 +177,33 @@ namespace AlbumCoverMatchGame
         }
         private void StartCoolDown()
         {
+            _playingMusic = false;
+            SolidColorBrush brush = new SolidColorBrush(Windows.UI.Colors.SteelBlue);
+            MyProgressBar.Foreground = brush;
+            InstructionTextBlock.Text = string.Format("Get ready for round {0} ...", _round + 1);
+            InstructionTextBlock.Foreground = brush;
+            CountDown.Begin();
+        }
+
+        private void StartCountDown()
+        {
+            _playingMusic = true;
+            SolidColorBrush brush = new SolidColorBrush(Colors.Crimson);
+            MyProgressBar.Foreground = brush;
+            InstructionTextBlock.Text = "Go!";
+            InstructionTextBlock.Foreground = brush;
             CountDown.Begin();
         }
 
         private void CountDown_Completed(object sender, object e)
         {
+            if (!_playingMusic)
+            {
+                // Start playing music
 
+                // Start countdown
+                StartCountDown();
+            }
         }
     }
 }
