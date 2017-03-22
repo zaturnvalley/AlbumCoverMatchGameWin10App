@@ -125,9 +125,33 @@ namespace AlbumCoverMatchGame
 
         }
 
-        private void SongGridView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void SongGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            // Ignore clicks when in cooldown
+            if (!_playingMusic) return;
+
+            CountDown.Pause();
+            MyMediaElement.Stop();
+
+            var clickedSong = (Song)e.ClickedItem;
+
+            //var correctSong = Songs.FirstOrDefault(p => p.Selected == true); 
+
             // Evaluate the user's selection
+            if (clickedSong.Selected)
+            {
+                var uri = new Uri("ms-appx:///Assets/correct.png");
+                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(uri);
+                var fileStream = await file.OpenAsync(FileAccessMode.Read);
+                await clickedSong.AlbumCover.SetSourceAsync(fileStream);
+            }
+            else
+            {
+                var uri = new Uri("ms-appx:///Assets/incorrect.png");
+                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(uri);
+                var fileStream = await file.OpenAsync(FileAccessMode.Read);
+                await clickedSong.AlbumCover.SetSourceAsync(fileStream);
+            }
             _round++;
             StartCoolDown();
         }
